@@ -1,6 +1,8 @@
 class Admin::ImportLeadsController < Admin::ApplicationController
-  before_filter :require_user
-  before_filter "set_current_tab('admin/import')"
+  before_action :require_admin_user
+  before_action do
+    "set_current_tab('admin/import')"
+  end
 
   def index
     redirect_to :action => :new
@@ -17,5 +19,4 @@ class Admin::ImportLeadsController < Admin::ApplicationController
 
     redirect_to new_admin_import_lead_path, :notice => "Leads successfully imported"
   end
-
 end
