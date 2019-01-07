@@ -16,7 +16,7 @@ class ImportLead
   # "State","ZIP code","ZIP+4","database name","File Date","id","Production Date"
   def import
     CSV.foreach(@file.path, :converters => :all, :return_headers => false, :headers => :first_row) do |row|
-      source, first_name, last_name, _, company, phone, *address = *row.to_hash.values
+      source, first_name, last_name, _, company, phone, *address, tags = *row.to_hash.values
 
       street, city, state, zip, _ = *address
       address = Address.new(:street1 => street, :city => city, :state => state, :zipcode => zip)
@@ -28,6 +28,7 @@ class ImportLead
       lead.last_name = "FILL ME" if lead.last_name.blank?
       lead.access = "Private"
       lead.addresses << address
+      lead.tags << tags if tags
 
       lead.assignee = @assigned if @assigned.present?
 
